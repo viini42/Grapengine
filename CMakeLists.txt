@@ -48,3 +48,5 @@ add_subdirectory(tests)
 # #############################################################################
 # Scripts
 add_subdirectory(Wineglass/nativescripts)
+
+add_subdirectory(Game)
