@@ -10,13 +10,13 @@ namespace GE
   class Framebuffer
   {
   public:
-    static Ptr<Framebuffer> Make(const Dimension& dimension);
+    static Ptr<Framebuffer> Make(const Dimensions& dimension);
 
-    explicit Framebuffer(const Dimension& dimension);
+    explicit Framebuffer(const Dimensions& dimension);
     ~Framebuffer();
 
     void Invalidate();
-    void Resize(Dimension dim);
+    void Resize(Dimensions dim);
 
     void Bind() const;
     void Unbind() const;
@@ -25,12 +25,12 @@ namespace GE
 
     [[nodiscard]] RendererID GetColorAttachmentID() const;
 
-    [[nodiscard]] const Dimension& GetDimension() const;
+    [[nodiscard]] const Dimensions& GetDimension() const;
 
   private:
     void Clear();
 
-    Dimension m_dimension;
+    Dimensions m_dimension;
     //    u32 samples = 1;
     //    bool swap_chain_target = false;
     RendererID m_id;

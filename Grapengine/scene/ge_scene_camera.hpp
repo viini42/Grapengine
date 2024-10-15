@@ -31,7 +31,7 @@ namespace GE
     void SetView(Vec3 position, Vec3 target);
     void SetFov(f32 fov);
     void SetOrthographicSize(f32 size);
-    void SetViewport(Dimension vp);
+    void SetViewport(Dimensions vp);
     void SetProjectionMode(ProjectionMode mode);
 
     bool operator==(const SceneCamera&) const;
@@ -43,7 +43,7 @@ namespace GE
     Vec3 m_position;
     Vec3 m_target;
 
-    Dimension m_viewport;
+    Dimensions m_viewport;
 
     // Perspective projection
     f32 m_fov;

@@ -17,7 +17,7 @@ namespace GE
   public:
     static void Init();
 
-    static void SetViewport(u32 x, u32 y, Dimension dim);
+    static void SetViewport(u32 x, u32 y, Dimensions dim);
 
     static void SetWireframeRenderMode(bool enabled);
 

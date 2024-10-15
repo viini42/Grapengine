@@ -180,7 +180,7 @@ void Scene::OnEvent(Event& /*ev*/)
   //  cam.cam->OnEvent(ev);
 }
 
-void Scene::OnViewportResize(Dimension dim)
+void Scene::OnViewportResize(Dimensions dim)
 {
   const std::vector<Entity> camera_entities = m_registry.Group<CameraComponent>();
   for (auto ent : camera_entities)

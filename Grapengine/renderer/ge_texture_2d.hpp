@@ -24,7 +24,7 @@ namespace GE
 
   private:
     std::filesystem::path m_path;
-    Dimension m_dim;
+    Dimensions m_dim;
     RendererID m_renderer_ID;
   };
 }

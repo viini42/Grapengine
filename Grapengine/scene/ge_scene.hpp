@@ -30,7 +30,7 @@ namespace GE
 
     void OnEvent(Event&);
 
-    void OnViewportResize(Dimension dim);
+    void OnViewportResize(Dimensions dim);
 
     void SetActiveCamera(Opt<Entity> activeCamera);
 

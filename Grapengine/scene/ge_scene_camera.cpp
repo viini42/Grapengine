@@ -33,7 +33,7 @@ void SceneCamera::SetView(Vec3 position, Vec3 target)
   m_target = target;
   RecalculateProjection();
 }
-void SceneCamera::SetViewport(Dimension vp)
+void SceneCamera::SetViewport(Dimensions vp)
 {
   GE_PROFILE;
   m_viewport = vp;

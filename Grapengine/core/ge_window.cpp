@@ -74,7 +74,7 @@ u32 Window::GetHeight() const
   return m_window_props.dim.height;
 }
 
-Dimension Window::GetDimension() const
+Dimensions Window::GetDimension() const
 {
   return m_window_props.dim;
 }
@@ -126,7 +126,7 @@ void Window::SetupCallbacks(const EventCallbackFn& cb)
                  std::make_pair(static_cast<u32>(width), static_cast<u32>(height)) };
     auto* data = static_cast<Window*>(glfwGetWindowUserPointer(win));
     data->m_event_callback(event);
-    data->m_window_props.dim = Dimension{ u32(width), u32(height) };
+    data->m_window_props.dim = Dimensions{ u32(width), u32(height) };
   };
   glfwSetWindowSizeCallback(m_window, resize_callback);
 

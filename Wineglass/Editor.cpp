@@ -5,7 +5,7 @@
 
 namespace
 {
-  constexpr GE::Dimension HD_DIMENSION{ 1280, 720 };
+  constexpr GE::Dimensions HD_DIMENSION{ 1280, 720 };
 }
 
 GE::Editor::Editor() :

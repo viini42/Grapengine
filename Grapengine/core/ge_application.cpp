@@ -22,7 +22,7 @@ namespace
   constexpr auto MS_IN_ONE_SEC = 1'000;
 }
 
-Application::Application(std::string_view title, Dimension dim, std::string_view icon)
+Application::Application(std::string_view title, Dimensions dim, std::string_view icon)
 {
   GE_PROFILE;
   GE_INFO("Application creation")
@@ -47,7 +47,7 @@ Ptr<Window> Application::GetWindow()
 }
 
 void Application::Init(std::string_view title,
-                       Dimension dim,
+                       Dimensions dim,
                        std::string_view icon,
                        const EventCallbackFn& cb)
 {

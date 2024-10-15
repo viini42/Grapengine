@@ -14,7 +14,7 @@ namespace GE
   class Application
   {
   public:
-    Application(std::string_view title, Dimension dim, std::string_view icon);
+    Application(std::string_view title, Dimensions dim, std::string_view icon);
     virtual ~Application();
 
     void AddLayer(const Ptr<Layer>& layer);
@@ -33,7 +33,7 @@ namespace GE
 
   private:
     void
-    Init(std::string_view title, Dimension dim, std::string_view icon, const EventCallbackFn& cb);
+    Init(std::string_view title, Dimensions dim, std::string_view icon, const EventCallbackFn& cb);
 
     void OnDestroy();
 

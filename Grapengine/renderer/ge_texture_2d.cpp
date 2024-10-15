@@ -32,7 +32,7 @@ Texture2D::Texture2D(const std::filesystem::path& path) : m_dim(), m_renderer_ID
   i32 channels{};
   stbi_uc* data = stbi_load(path.string().c_str(), &w, &h, &channels, 0);
 
-  m_dim = Dimension{ u32(w), u32(h) };
+  m_dim = Dimensions{ u32(w), u32(h) };
 
   u32 internal_format = 0;
   u32 format = 0;

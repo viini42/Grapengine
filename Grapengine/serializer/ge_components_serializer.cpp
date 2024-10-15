@@ -54,7 +54,7 @@ namespace
     GE_ASSERT_NO_MSG(e.good());
     return e;
   }
-  YAML::Emitter& operator<<(YAML::Emitter& e, const Dimension& d)
+  YAML::Emitter& operator<<(YAML::Emitter& e, const Dimensions& d)
   {
     e << YAML::Flow;
     e << YAML::BeginSeq;
@@ -140,9 +140,9 @@ namespace YAML
   };
 
   template <>
-  struct convert<Dimension>
+  struct convert<Dimensions>
   {
-    static bool decode(const Node& node, Dimension& d)
+    static bool decode(const Node& node, Dimensions& d)
     {
       GE_ASSERT_OR_RETURN(node.IsSequence() && node.size() == 2, false, "Dimension not found");
 
@@ -235,7 +235,7 @@ namespace YAML
       const auto& camera = node[Fields::CAMERA].as<Camera>();
       const auto& pos = node[Fields::POSITION].as<Vec3>();
       const auto& target = node[Fields::TARGET].as<Vec3>();
-      const auto& viewport = node[Fields::VIEWPORT].as<Dimension>();
+      const auto& viewport = node[Fields::VIEWPORT].as<Dimensions>();
       const auto& fov = node[Fields::FOV].as<f32>();
       const auto& ortho = node[Fields::ORTHO_SIZE].as<f32>();
       const auto& proj_mode = node[Fields::PROJECTION_MODE].as<i32>();

@@ -78,7 +78,7 @@ void Renderer::Init()
   glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 }
 
-void Renderer::SetViewport(u32 x, u32 y, Dimension dim)
+void Renderer::SetViewport(u32 x, u32 y, Dimensions dim)
 {
   glViewport(i32(x), i32(y), i32(dim.width), i32(dim.height));
 }

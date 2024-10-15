@@ -124,7 +124,7 @@ void ImGuiLayer::End()
 {
   GE_PROFILE;
   auto& io = ImGui::GetIO();
-  const Dimension win_dim = m_window->GetDimension();
+  const Dimensions win_dim = m_window->GetDimension();
   io.DisplaySize = ImVec2(static_cast<f32>(win_dim.width), static_cast<float>(win_dim.height));
 
   ImGui::Render();

@@ -19,9 +19,9 @@ namespace GE
   {
     std::string title;
     std::string icon_path;
-    Dimension dim;
+    Dimensions dim;
 
-    explicit WindowProps(std::string_view titleStr, Dimension d, std::string_view icon) :
+    explicit WindowProps(std::string_view titleStr, Dimensions d, std::string_view icon) :
         title(titleStr), icon_path(icon), dim(d)
     {
     }
@@ -37,7 +37,7 @@ namespace GE
 
     [[deprecated("Use GetDimension")]] [[nodiscard]] u32 GetWidth() const;
     [[deprecated("Use GetDimension")]] [[nodiscard]] u32 GetHeight() const;
-    [[nodiscard]] Dimension GetDimension() const;
+    [[nodiscard]] Dimensions GetDimension() const;
 
     void SetVsync(bool enabled);
     bool IsVsync() const;

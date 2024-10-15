@@ -24,13 +24,13 @@ namespace
 
 }
 
-Ptr<Framebuffer> Framebuffer::Make(const Dimension& dimension)
+Ptr<Framebuffer> Framebuffer::Make(const Dimensions& dimension)
 {
   GE_PROFILE;
   return MakeRef<Framebuffer>(dimension);
 }
 
-Framebuffer::Framebuffer(const Dimension& dimension) :
+Framebuffer::Framebuffer(const Dimensions& dimension) :
     m_dimension(dimension), m_id(0), m_color_attachment(0), m_depth_attachment(0)
 {
   GE_PROFILE;
@@ -123,12 +123,12 @@ RendererID GE::Framebuffer::GetColorAttachmentID() const
   return m_color_attachment;
 }
 
-const Dimension& GE::Framebuffer::GetDimension() const
+const Dimensions& GE::Framebuffer::GetDimension() const
 {
   return m_dimension;
 }
 
-void GE::Framebuffer::Resize(Dimension dim)
+void GE::Framebuffer::Resize(Dimensions dim)
 {
   if (dim.IsEmpty())
     return;

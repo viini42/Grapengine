@@ -5,17 +5,17 @@
 
 namespace GE
 {
-  struct Dimension
+  struct Dimensions
   {
     u32 width;
     u32 height;
 
     [[nodiscard]] bool IsEmpty() const { return width == 0 || height == 0; }
-    [[nodiscard]] bool operator==(const Dimension& rhs) const
+    [[nodiscard]] bool operator==(const Dimensions& rhs) const
     {
       return width == rhs.width && height == rhs.height;
     }
-    [[nodiscard]] bool operator!=(const Dimension& rhs) const { return !(rhs == *this); }
+    [[nodiscard]] bool operator!=(const Dimensions& rhs) const { return !(rhs == *this); }
   };
 }
 

@@ -28,7 +28,7 @@ namespace GE
     Entity m_front_camera_entity;
 
     Ptr<Framebuffer> m_fb = nullptr;
-    Dimension m_viewport_dimension{};
+    Dimensions m_viewport_dimension{};
     //    bool m_viewport_focused{};
     bool m_viewport_hovered = true;
 
