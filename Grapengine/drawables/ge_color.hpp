@@ -62,6 +62,7 @@ namespace GE
     [[maybe_unused]] constexpr Color YELLOW{ 0xFFFF33 };
     [[maybe_unused]] constexpr Color MAGENTA{ 0xFF33FF };
     [[maybe_unused]] constexpr Color ORANGE{ 0xF79300 }; // McLaren
+    [[maybe_unused]] constexpr Color GRAY{ 0x57514D };
 
     Color RandomColor();
   }
