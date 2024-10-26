@@ -74,6 +74,11 @@ Vec3 Vec3::operator*(const f32 fac) const
   return { x * fac, y * fac, z * fac };
 }
 
+Vec3 Vec3::operator/(f32 fac) const
+{
+  return { x / fac, y / fac, z / fac };
+}
+
 Vec3& Vec3::operator+=(const Vec3& other)
 {
   this->x += other.x;

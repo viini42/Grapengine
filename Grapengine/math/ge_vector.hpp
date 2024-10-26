@@ -50,6 +50,7 @@ namespace GE
     Vec3 operator-(const Vec3& other) const;
     Vec3& operator-();
     Vec3 operator*(f32 fac) const;
+    Vec3 operator/(f32 fac) const;
     Vec3& operator+=(const Vec3& other);
     [[nodiscard]] Vec3 Normalize() const;
     [[nodiscard]] Vec3 Cross(const Vec3& other) const;
