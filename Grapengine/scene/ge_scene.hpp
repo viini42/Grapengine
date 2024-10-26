@@ -49,15 +49,18 @@ namespace GE
     const TexturesRegistry& GetTextureRegistry() const;
     TexturesRegistry& GetTextureRegistry();
 
+    void DisableEntity(Entity ent);
+    void EnableEntity(Entity ent);
+
     [[nodiscard]] bool operator==(const Scene& other) const = default;
 
     // Registry wrappers functions
 
     template <typename Component, typename... Args>
-    Component& AddComponent(const Entity& ent, Args&&... args)
+    void AddComponent(const Entity& ent, Args&&... args)
     {
       GE_PROFILE;
-      return m_registry.AddComponent<Component>(ent, std::forward<Args>(args)...);
+      m_registry.AddComponent<Component>(ent, std::forward<Args>(args)...);
     }
 
     template <typename Component>
@@ -106,6 +109,8 @@ namespace GE
     void UpdateActiveCamera();
     void UpdateLightSources() const;
     void UpdateAmbientLight() const;
+
+    void DestroyFromQueue();
 
     [[nodiscard]] Opt<Entity> RetrieveActiveCamera() const;
 

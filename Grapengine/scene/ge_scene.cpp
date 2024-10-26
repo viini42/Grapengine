@@ -251,13 +251,18 @@ Opt<Entity> Scene::RetrieveActiveCamera() const
   return active_camera;
 }
 
+void Scene::DestroyFromQueue()
+{
+  for (auto ent : GetQueue())
+    m_registry.Destroy(ent);
+}
+
 void Scene::OnEachEntity(const std::function<void(Entity)>& fun)
 {
   GE_PROFILE;
   m_registry.OnEach(fun);
 
-  for (auto ent : GetQueue())
-    m_registry.Destroy(ent);
+  DestroyFromQueue();
 }
 
 const std::list<Entity>& Scene::GetEntitiesList() const
@@ -298,6 +303,16 @@ const TexturesRegistry& Scene::GetTextureRegistry() const
 TexturesRegistry& Scene::GetTextureRegistry()
 {
   return m_textures_registry;
+}
+
+void Scene::DisableEntity(Entity ent)
+{
+  m_registry.DisableEntity(ent);
+}
+
+void Scene::EnableEntity(Entity ent)
+{
+  m_registry.EnableEntity(ent);
 }
 
 void Scene::SetActiveCamera(Opt<Entity> activeCamera)

@@ -28,16 +28,15 @@ namespace GE
      * @param args argument list to construct the component
      */
     template <typename Component, typename... Args>
-    Component& AddComponent(const Entity& ent, Args... args)
+    void AddComponent(const Entity& ent, Args... args)
     {
       GE_PROFILE;
       GE_ASSERT(!Has<Component>(ent), "Entity already has this component!");
 
-      VarComponent& added =
-        m_components[ent].emplace_back(std::in_place_type<Component>, std::forward<Args>(args)...);
+      /*VarComponent& added =*/
+      m_components[ent].emplace_back(std::in_place_type<Component>, std::forward<Args>(args)...);
       m_entities_with_components[ent].insert(typeid(Component).hash_code());
 
-      return *std::get_if<Component>(&added);
     }
 
     template <typename Component>
@@ -139,12 +138,16 @@ namespace GE
     {
       GE_PROFILE;
 
+      // Get all component types id required
       std::set<u64> comps;
       (..., [&] { comps.insert(typeid(Comps).hash_code()); }());
 
       std::vector<Entity> entities;
       for (const auto& [ent, its_comps] : m_entities_with_components)
       {
+        if (m_entities_disabled.contains(ent))
+          continue;
+
         if (std::ranges::includes(its_comps, comps))
           entities.push_back(ent);
       }
@@ -154,10 +157,14 @@ namespace GE
     void OnEach(const std::function<void(Entity)>& action);
     void OnEach(const std::function<void(Entity)>& action) const;
 
+    void DisableEntity(Entity ent);
+    void EnableEntity(Entity ent);
+
     [[nodiscard]] bool operator==(const ECRegistry& other) const;
 
   private:
     std::set<Entity> m_entities;
+    std::set<Entity> m_entities_disabled;
     std::list<Entity> m_entities_sorted_list;
     std::map<Entity, std::vector<VarComponent>> m_components;
     std::map<Entity, std::set<u64>> m_entities_with_components;

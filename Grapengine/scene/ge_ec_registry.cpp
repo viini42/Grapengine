@@ -28,6 +28,30 @@ void ECRegistry::OnEach(const std::function<void(Entity)>& action) const
   std::ranges::for_each(m_entities_sorted_list, action);
 }
 
+void ECRegistry::DisableEntity(Entity ent)
+{
+  GE_PROFILE;
+  if (!m_entities.contains(ent))
+    return;
+
+  if (m_entities_disabled.contains(ent))
+    return;
+
+  m_entities_disabled.insert(m_entities.extract(ent));
+}
+
+void ECRegistry::EnableEntity(Entity ent)
+{
+  GE_PROFILE;
+  if (m_entities.contains(ent))
+    return;
+
+  if (!m_entities_disabled.contains(ent))
+    return;
+
+  m_entities.insert(m_entities_disabled.extract(ent));
+}
+
 bool ECRegistry::operator==(const ECRegistry& other) const
 {
   const bool entities_equal = m_entities == other.m_entities;
