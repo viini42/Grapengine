@@ -33,6 +33,7 @@ namespace GE
     bool m_viewport_hovered = true;
 
     Ptr<SceneHierarchyPanel> m_scene_panel;
+    EditorCamera m_editor_camera;
   };
 }
 

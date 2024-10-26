@@ -8,6 +8,7 @@
 
 namespace GE
 {
+  class EditorCamera;
   class Scene
   {
   public:
@@ -27,6 +28,7 @@ namespace GE
     void OnAttach();
 
     void OnUpdate(TimeStep ts);
+    void OnUpdateEditor(TimeStep ts, EditorCamera& editorCamera);
 
     void OnEvent(Event&);
 
@@ -98,8 +100,9 @@ namespace GE
 
   private:
     void UpdateNativeScripts(TimeStep& ts);
-    void UpdateDrawableEntities(TimeStep& ts);
-    void UpdateLightSourcesPosition(TimeStep& ts);
+    void UpdateDrawableEntities(TimeStep& ts, const Mat4& cameraMatrix, const Vec3& viewPosition);
+    void UpdateWithCamera(TimeStep& ts, const Mat4& cameraMatrix, const Vec3& viewPosition);
+    void UpdateLightSourcesPosition(TimeStep& ts, const Mat4& cameraMatrix, const Vec3& viewPosition);
     void UpdateActiveCamera();
     void UpdateLightSources() const;
     void UpdateAmbientLight() const;

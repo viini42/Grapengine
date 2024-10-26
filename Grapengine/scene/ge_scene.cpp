@@ -3,6 +3,7 @@
 #include "events/ge_event.hpp"
 #include "math/ge_vector.hpp"
 #include "profiling/ge_profiler.hpp"
+#include "renderer/ge_editor_camera.hpp"
 #include "renderer/ge_renderer.hpp"
 #include "scene/ge_components.hpp"
 #include "scene/ge_scriptable_entity.hpp"
@@ -29,10 +30,23 @@ void Scene::OnUpdate(TimeStep ts)
   GE_PROFILE;
   UpdateNativeScripts(ts);
   UpdateActiveCamera();
-  UpdateLightSourcesPosition(ts);
-  UpdateLightSources();
-  UpdateAmbientLight();
-  UpdateDrawableEntities(ts);
+
+  const auto& active_camera = m_active_camera.value();
+  const auto& cam = m_registry.GetComponent<CameraComponent>(active_camera).GetCamera();
+  const auto& cam_matrix = cam.GetViewProjection();
+  const auto& cam_pos = cam.GetPosition();
+  UpdateWithCamera(ts, cam_matrix, cam_pos);
+}
+
+void Scene::OnUpdateEditor(TimeStep ts, EditorCamera& editorCamera)
+{
+  GE_PROFILE;
+  UpdateNativeScripts(ts);
+  UpdateActiveCamera();
+
+  const auto& cam_matrix = editorCamera.GetViewProjection();
+  const auto& cam_pos = editorCamera.GetPosition();
+  UpdateWithCamera(ts, cam_matrix, cam_pos);
 }
 
 void Scene::UpdateLightSources() const
@@ -102,7 +116,9 @@ void Scene::UpdateNativeScripts(TimeStep& ts)
   }
 }
 
-void Scene::UpdateDrawableEntities(TimeStep& /*ts*/)
+void Scene::UpdateDrawableEntities(TimeStep& /*ts*/,
+                                   const Mat4& cameraMatrix,
+                                   const Vec3& viewPosition)
 {
   GE_PROFILE;
   if (!m_active_camera.has_value())
@@ -124,16 +140,10 @@ void Scene::UpdateDrawableEntities(TimeStep& /*ts*/)
     Renderer::SetTextureSlots(textures);
   }
 
-  const auto& active_camera = m_active_camera.value();
-
-  const CameraComponent& cam_component = m_registry.GetComponent<CameraComponent>(active_camera);
-
   const std::vector<Entity> gmat = m_registry.Group<TransformComponent, PrimitiveComponent>();
-
   {
     GE_PROFILE_SECTION("Batch renderer");
-    Renderer::Batch::Begin(cam_component.GetCamera().GetViewProjection(),
-                           cam_component.GetCamera().GetPosition());
+    Renderer::Batch::Begin(cameraMatrix, viewPosition);
     for (auto ent : gmat)
     {
       const TransformComponent& transl_scale_comp =
@@ -151,11 +161,21 @@ void Scene::UpdateDrawableEntities(TimeStep& /*ts*/)
   }
 }
 
+void Scene::UpdateWithCamera(TimeStep& ts, const Mat4& cameraMatrix, const Vec3& viewPosition)
+{
+  UpdateLightSourcesPosition(ts, cameraMatrix, viewPosition);
+  UpdateLightSources();
+  UpdateAmbientLight();
+
+  UpdateDrawableEntities(ts, cameraMatrix, viewPosition);
+
+  DestroyFromQueue();
+}
+
 Entity Scene::CreateEntity(std::string&& name)
 {
   GE_PROFILE;
   Entity ent = m_registry.Create();
-  GE_INFO("Creating entity \'{}\' with id={}", name, ent.handle)
   AddComponent<TagComponent>(ent, std::move(name));
   return ent;
 }
@@ -308,24 +328,21 @@ void Scene::OnAttach()
   m_textures_registry.LoadTextures();
 }
 
-void Scene::UpdateLightSourcesPosition(TimeStep& /*ts*/)
+void Scene::UpdateLightSourcesPosition(TimeStep& /*ts*/,
+                                       const Mat4& cameraMatrix,
+                                       const Vec3& viewPosition)
 {
   GE_PROFILE;
   const std::vector<Entity> light_sources = m_registry.Group<LightSourceComponent>();
   if (light_sources.empty())
     return;
 
-  const auto& active_camera = m_active_camera.value();
-
-  const CameraComponent& cam_component = m_registry.GetComponent<CameraComponent>(active_camera);
-
   { // Reset ambient and light colors
     Renderer::SetAmbientLight(Colors::WHITE, 1.0f);
     Renderer::SetLightSources({});
   }
 
-  Renderer::Batch::Begin(cam_component.GetCamera().GetViewProjection(),
-                         cam_component.GetCamera().GetPosition());
+  Renderer::Batch::Begin(cameraMatrix, viewPosition);
   for (auto ent : light_sources)
   {
     auto& lp = m_registry.GetComponent<LightSourceComponent>(ent);

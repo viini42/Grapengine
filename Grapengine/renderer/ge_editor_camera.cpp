@@ -1,7 +1,9 @@
 #include "renderer/ge_editor_camera.hpp"
 
+#include "core/ge_platform.hpp"
 #include "math/ge_geometry.hpp"
 #include "math/ge_quaternions.hpp"
+#include "profiling/ge_profiler.hpp"
 
 #include <core/ge_time_step.hpp>
 #include <events/ge_event.hpp>
@@ -14,27 +16,21 @@ using namespace GE;
 namespace
 {
   constexpr Vec3 UP_DIR{ 0, 1, 0 };
-  constexpr Vec3 INITIAL_EYE_POSITION{ 2.5f, 2.5f, 12.0f };
-  constexpr Vec3 INITIAL_FOCAL_POINT{ 2.5f, 2.5f, 2.5f };
 
+  constexpr auto DEFAULT_FOV = 30.0f;
   constexpr auto ZOOM_FACTOR = 15;
 }
 
-EditorCamera::EditorCamera() : EditorCamera(0, 0) {}
-
-EditorCamera::EditorCamera(f32 fov, f32 aspectRatio) :
-    m_field_of_view(fov),
-    m_aspect_ratio(aspectRatio),
-    m_eye(INITIAL_EYE_POSITION),
-    m_focal_point(INITIAL_FOCAL_POINT)
+EditorCamera::EditorCamera(const Vec3& eye, const Vec3& target) :
+    m_field_of_view(DEFAULT_FOV), m_aspect_ratio(1), m_eye(eye), m_focal_point(target)
 {
-  m_projection_mat = Transform::Perspective(fov, aspectRatio);
+  m_projection_mat = Transform::Perspective(m_field_of_view, m_aspect_ratio);
 }
 
-void EditorCamera::OnUpdate(TimeStep ts)
+void EditorCamera::OnUpdate(TimeStep /*ts*/)
 {
   if (Input::IsKeyPressed(KeyCode::LEFT_CONTROL))
-    ProcessMouseAction(ts.f());
+    ProcessMouseAction();
 
   UpdateView();
 }
@@ -61,16 +57,35 @@ Mat4 EditorCamera::GetViewProjection() const
   return ViewProjection();
 }
 
-void EditorCamera::OnResize(u32 w, u32 h)
+const Vec3& EditorCamera::GetPosition() const
 {
-  UpdateAspectRatio(w, h);
+  return m_eye;
 }
 
-void EditorCamera::ProcessMouseAction(f32 timestep)
+void EditorCamera::SetView(const Vec3& position, const Vec3& target)
+{
+  GE_PROFILE;
+  m_eye = position;
+  m_focal_point = target;
+  RecalculateProjection();
+}
+
+bool EditorCamera::operator==(const EditorCamera& other) const
+{
+  return m_eye == other.m_eye && m_focal_point == other.m_focal_point;
+}
+
+void EditorCamera::OnResize(const Dimensions& newSize)
+{
+  UpdateAspectRatio(newSize);
+}
+
+void EditorCamera::ProcessMouseAction()
 {
   const Vec2 mouse_pos = Input::GetMouseXY();
   const Vec2 delta = (mouse_pos - m_mouse_init_pos);
   m_mouse_init_pos = mouse_pos;
+
 
   if (std::abs(delta.x) < std::numeric_limits<f32>::epsilon() &&
       std::abs(delta.y) < std::numeric_limits<f32>::epsilon())
@@ -82,8 +97,8 @@ void EditorCamera::ProcessMouseAction(f32 timestep)
   {
     // Rotate a given point around plane contains x_eye
     const auto eye_origin_reference = (m_eye - m_focal_point).Normalize();
-    const auto yaw_angle = -delta.x * timestep * 0.01f;
-    const auto pitch_angle = -delta.y * timestep * 0.01f;
+    const auto yaw_angle = -delta.x  * 0.1f;
+    const auto pitch_angle = -delta.y * 0.1f;
     const auto q =                               //
       Quaternion(yaw_angle, y_eye.Normalize()) * //
       Quaternion(pitch_angle, x_eye.Normalize());
@@ -137,7 +152,7 @@ void EditorCamera::UpdateView()
 
 void EditorCamera::OnMouseScroll(MousePairData data)
 {
-  const f32 delta = std::get<1>(data) * 0.01f;
+  const f32 delta = std::get<1>(data) * 0.1f;
   MouseZoom(delta);
   UpdateView();
 }
@@ -176,8 +191,15 @@ bool EditorCamera::OnMouseReleased(KeyCode bt)
   return false;
 }
 
-void EditorCamera::UpdateAspectRatio(u32 w, u32 h)
+void EditorCamera::UpdateAspectRatio(const Dimensions& viewport)
 {
-  m_aspect_ratio = f32(w) / f32(h);
+  m_aspect_ratio = f32(viewport.width) / f32(viewport.height);
+  RecalculateProjection();
+}
+
+void EditorCamera::RecalculateProjection()
+{
+  GE_PROFILE;
+
   m_projection_mat = Transform::Perspective(m_field_of_view, m_aspect_ratio);
 }

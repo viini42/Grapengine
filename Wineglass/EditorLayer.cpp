@@ -10,7 +10,8 @@ EditorLayer::EditorLayer() :
     Layer("EditorLayer"),
     m_scene(Scene::Make("Default")),
     m_front_camera_entity(m_scene->CreateEntity("Front Camera")),
-    m_scene_panel(nullptr)
+    m_scene_panel(nullptr),
+    m_editor_camera(Vec3{ 0, 0, 10 }, Vec3{ 0, 0, 0 })
 {
 }
 
@@ -44,14 +45,17 @@ void EditorLayer::OnUpdate(TimeStep ts)
   {
     m_fb->Resize(m_viewport_dimension);
     m_scene->OnViewportResize(m_viewport_dimension);
+    m_editor_camera.UpdateAspectRatio(m_viewport_dimension);
   }
+
+  m_editor_camera.OnUpdate(ts);
 
   m_fb->Bind();
 
   Renderer::SetClearColor(Color{ CLEAR_COLOR }.ToVec4());
   Renderer::Clear();
 
-  m_scene->OnUpdate(ts);
+  m_scene->OnUpdateEditor(ts, m_editor_camera);
 
   m_fb->Unbind();
 }
@@ -197,6 +201,7 @@ void EditorLayer::OnImGuiUpdate(TimeStep ts)
 
 void EditorLayer::OnEvent(Event& e)
 {
+  m_editor_camera.OnEvent(e);
   m_scene->OnEvent(e);
 }
 

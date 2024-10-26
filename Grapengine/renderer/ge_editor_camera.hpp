@@ -2,6 +2,7 @@
 #define GE_EDITOR_CAMERA_HPP
 
 #include "events/ge_event_type.hpp"
+#include "utils/ge_dimension.hpp"
 
 #include <math/ge_vector.hpp>
 
@@ -13,25 +14,30 @@ namespace GE
   class EditorCamera
   {
   public:
-    EditorCamera();
-    EditorCamera(f32 fov, f32 aspectRatio);
+    EditorCamera(const Vec3& eye, const Vec3& target);
 
     void OnUpdate(TimeStep ts);
     void OnEvent(Event& event);
 
-    void OnResize(u32 w, u32 h);
+    void OnResize(const Dimensions& newSize);
 
     [[nodiscard]] Mat4 GetViewProjection() const;
+    [[nodiscard]] const Vec3& GetPosition() const;
+
+    void SetView(const Vec3& position, const Vec3& target);
+    void UpdateAspectRatio(const Dimensions& viewport);
+
+    bool operator==(const EditorCamera&) const;
 
   private:
-    void ProcessMouseAction(f32 timestep);
+    void ProcessMouseAction();
     [[nodiscard]] Mat4 ViewProjection() const;
     void MouseZoom(f32 delta);
     void UpdateView();
     void OnMouseScroll(MousePairData data);
     [[nodiscard]] bool OnMousePressed(KeyCode bt);
     [[nodiscard]] bool OnMouseReleased(KeyCode bt);
-    void UpdateAspectRatio(u32 w, u32 h);
+    void RecalculateProjection();
 
     f32 m_field_of_view;
     f32 m_aspect_ratio;
