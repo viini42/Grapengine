@@ -6,7 +6,7 @@ namespace GE
   class Platform
   {
   public:
-    static u64 GetCurrentTimeMS();
+    static u64 GetCurrentTimeNS();
 
     [[noreturn]] static void Unreachable();
   };

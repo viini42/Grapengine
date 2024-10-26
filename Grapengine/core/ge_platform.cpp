@@ -14,6 +14,18 @@ u64 Platform::GetCurrentTimeMS()
   return static_cast<u64>(millis);
 }
 
+u64 Platform::GetCurrentTimeNS()
+{
+  // Get the current time point
+  auto now = std::chrono::system_clock::now();
+
+  // Cast the time point to milliseconds since epoch
+  auto duration = now.time_since_epoch();
+  auto nano = std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count();
+
+  return static_cast<u64>(nano);
+}
+
 void Platform::Unreachable()
 {
   // Uses compiler specific extensions if possible.

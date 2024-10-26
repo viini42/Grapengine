@@ -56,7 +56,7 @@ void EditorLayer::OnUpdate(TimeStep ts)
   m_fb->Unbind();
 }
 
-static u64 s_timer_checker = 0;
+static f64 s_timer_checker = 0;
 
 void EditorLayer::OnImGuiUpdate(TimeStep ts)
 {
@@ -158,7 +158,7 @@ void EditorLayer::OnImGuiUpdate(TimeStep ts)
   {
     static Renderer::Statistics stats{};
     static f64 fps{};
-    if (s_timer_checker > 1'000)
+    if (s_timer_checker > 1)
     {
       stats = Renderer::GetStats();
       fps = static_cast<double>(Ctrl::App::GetFPS());
@@ -168,10 +168,9 @@ void EditorLayer::OnImGuiUpdate(TimeStep ts)
     //    ImGui::Text("Draw calls: %05" PRIu64, stats.draw_calls);
     ImGui::Text("Vertices count: %" PRIu64, stats.vertices_count);
     ImGui::Text("Indices count: %" PRIu64, stats.indices_count);
-    ImGui::Text("Time spent to batch: %" PRIu64 "ms", stats.time_spent);
-    ImGui::Text("Batches per second: %" PRIu64, 1'000 / stats.time_spent);
+    ImGui::Text("Time spent to batch: %f s", static_cast<f64>(stats.time_spent) * 1e-9);
     ImGui::Text("FPS %.2f", fps);
-    s_timer_checker += ts.u();
+    s_timer_checker += ts.Secs();
   }
   ImGui::End();
 

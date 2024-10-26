@@ -153,7 +153,7 @@ void Renderer::Batch::Begin(const Mat4& cameraMatrix, const Vec3& viewPosition)
   {
     GetStats().vertices_count = 0;
     GetStats().indices_count = 0;
-    GetTiming() = Platform::GetCurrentTimeMS();
+    GetTiming() = Platform::GetCurrentTimeNS();
   }
   OnShader(
     [&](MaterialShader& shader)
@@ -170,7 +170,7 @@ void Renderer::Batch::End()
   OnShader([&](MaterialShader& shader) { shader.Activate(); });
   GetBatchRenderer().End();
   {
-    GetStats().time_spent = (Platform::GetCurrentTimeMS() - GetTiming()) + 1;
+    GetStats().time_spent = (Platform::GetCurrentTimeNS() - GetTiming()) + 1;
   }
 }
 

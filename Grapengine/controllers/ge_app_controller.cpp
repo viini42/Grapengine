@@ -48,7 +48,7 @@ Ctrl::App& Ctrl::App::Get()
   return app;
 }
 
-f32 Ctrl::App::GetFPS()
+f64 Ctrl::App::GetFPS()
 {
   return Get().m_application->GetFPS();
 }

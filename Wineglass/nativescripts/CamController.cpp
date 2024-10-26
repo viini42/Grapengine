@@ -23,7 +23,7 @@ void CamController::OnUpdate(TimeStep ts)
     return;
 
   constexpr f32 speed = 0.01f;
-  const f32 incr = speed * ts.f();
+  const f32 incr = speed * static_cast<f32>(ts.Secs());
 
   auto& camera_comp = m_scene.GetComponent<CameraComponent>(m_entity);
   if (!camera_comp.IsActive())

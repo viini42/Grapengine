@@ -6,14 +6,17 @@ namespace GE
   class TimeStep
   {
   public:
-    explicit TimeStep(const u64 ms) : m_time_ms(ms) {}
+    explicit TimeStep(const u64 ns) : m_time_ns(ns) {}
 
-    [[nodiscard]] f32 f() const { return static_cast<f32>(m_time_ms); }
+    [[nodiscard]] f64 Secs() const
+    {
+      return static_cast<f64>(m_time_ns) * 1e-9;
+    }
 
-    [[nodiscard]] u64 u() const { return m_time_ms; }
+    [[nodiscard]] u64 u() const { return m_time_ns; }
 
   private:
-    u64 m_time_ms;
+    u64 m_time_ns;
   };
 }
 

@@ -19,7 +19,6 @@ namespace
   constexpr auto IMGUI_FRAME = "IMGUI_FRAME";
   constexpr auto LAYERS_FRAME = "LAYERS_FRAME";
 #endif
-  constexpr auto MS_IN_ONE_SEC = 1'000;
 }
 
 Application::Application(std::string_view title, Dimensions dim, std::string_view icon)
@@ -75,13 +74,14 @@ void Application::OnDestroy()
 void Application::Run()
 {
   GE_PROFILE;
+  m_last_frame_time = Platform::GetCurrentTimeNS();
 
   while (m_running)
   {
-    const u64 time_ms = Platform::GetCurrentTimeMS();
+    const u64 time_ms = Platform::GetCurrentTimeNS();
     TimeStep step{ time_ms - m_last_frame_time };
     m_last_frame_time = time_ms;
-    m_current_fps = MS_IN_ONE_SEC / step.f();
+    m_current_fps = 1.0 / step.Secs();
 
     if (!m_minimized)
     {
