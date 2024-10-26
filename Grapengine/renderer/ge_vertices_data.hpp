@@ -30,6 +30,8 @@ namespace GE
     std::vector<VertexStruct>& GetData();
     const std::vector<VertexStruct>& GetData() const;
 
+    void SortVertices();
+
     bool operator==(const VerticesData& other) const = default;
 
   private:

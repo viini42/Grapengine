@@ -47,6 +47,11 @@ const std::vector<VertexStruct>& VerticesData::GetData() const
   return m_data;
 }
 
+void VerticesData::SortVertices()
+{
+  std::ranges::sort(m_data);
+}
+
 void VerticesData::Clear()
 {
   m_data.clear();

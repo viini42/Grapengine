@@ -39,6 +39,7 @@ void BatchRenderer::Begin()
 
 void BatchRenderer::End()
 {
+  m_vertices_data.first->SortVertices();
   m_drawing_object.SetVerticesData(m_vertices_data.first);
   m_drawing_object.SetIndicesData(m_vertices_data.second);
 

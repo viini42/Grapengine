@@ -15,6 +15,14 @@ namespace GE
     u32 texture_slot;
 
     bool operator==(const VertexStruct& other) const = default;
+    bool operator<=>(const VertexStruct& other) const
+    {
+      if (color.x3 < other.color.x3)
+        return 1;
+      if (color.x3 > other.color.x3)
+        return -1;
+      return 0;
+    }
   };
 
   class IShaderProgram
