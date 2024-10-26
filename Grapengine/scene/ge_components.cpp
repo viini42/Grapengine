@@ -8,7 +8,8 @@ using namespace GE;
 TagComponent::TagComponent(std::string&& t) : m_tag(std::move(t)) {}
 
 //----------------------------------------------------------------------------------------------
-PrimitiveComponent::PrimitiveComponent(const Drawable& dra, Color c, u32 texSlot) : m_drawable(dra), m_color(c), m_texture_slot(texSlot)
+PrimitiveComponent::PrimitiveComponent(const Drawable& dra, Color c, u32 texSlot) :
+    m_drawable(dra), m_color(c), m_texture_slot(texSlot)
 {
 }
 const Drawable& PrimitiveComponent::GetDrawable() const

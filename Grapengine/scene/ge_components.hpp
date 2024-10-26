@@ -120,10 +120,10 @@ namespace GE
   public:
     explicit NativeScriptComponent();
 
-    template <typename T>
-    void Bind()
+    template <typename T, typename... Args>
+    void Bind(Args... args)
     {
-      m_instantiate_fun = [this](Entity e, Scene& s) { m_instance = new T(e, std::ref(s)); };
+      m_instantiate_fun = [&](Entity e, Scene& s) { m_instance = new T(e, std::ref(s), std::forward<Args>(args)...); };
       m_destroy_fun = [this]()
       {
         delete static_cast<T*>(m_instance);
