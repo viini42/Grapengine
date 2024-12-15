@@ -15,7 +15,7 @@ namespace GE
     u32 texture_slot;
 
     bool operator==(const VertexStruct& other) const = default;
-    bool operator<=>(const VertexStruct& other) const
+    auto operator<=>(const VertexStruct& other) const
     {
       if (color.x3 < other.color.x3)
         return 1;
