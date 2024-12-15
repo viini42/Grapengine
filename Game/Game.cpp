@@ -4,7 +4,7 @@
 
 #include <core/ge_entry_point.hpp>
 
-Game::Game() : GE::Application("F1 Game", { 640, 480 }, "") {
+Game::Game() : GE::Application("Game", { 480, 480 }, "") {
   auto main_layer = GE::MakeRef<MainLayer>();
   AddLayer(main_layer);
 }
