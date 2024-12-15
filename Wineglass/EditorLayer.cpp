@@ -18,8 +18,8 @@ EditorLayer::EditorLayer() :
 void EditorLayer::OnAttach()
 {
   auto amb_light = m_scene->CreateEntity("Ambient light");
-  auto& c = m_scene->AddComponent<AmbientLightComponent>(amb_light, Colors::WHITE, .25f);
-  c.SetActive(true);
+  m_scene->AddComponent<AmbientLightComponent>(amb_light, Colors::WHITE, .25f);
+  m_scene->GetComponent<AmbientLightComponent>(amb_light).SetActive(true);
 
   m_scene->AddComponent<CameraComponent>(m_front_camera_entity,
                                          Vec3{ 0, 0, 10 },
@@ -31,7 +31,8 @@ void EditorLayer::OnAttach()
   m_scene->AddComponent<PrimitiveComponent>(cube_ent, Cube().GetDrawable(), Colors::WHITE);
   m_scene->AddComponent<TransformComponent>(cube_ent, Vec3{ 0, 0, 0 });
 
-  m_scene->AddComponent<NativeScriptComponent>(m_front_camera_entity).Bind<CamController>();
+  m_scene->AddComponent<NativeScriptComponent>(m_front_camera_entity);
+  m_scene->GetComponent<NativeScriptComponent>(m_front_camera_entity).Bind<CamController>();
 
   m_scene->OnAttach();
   m_scene_panel = MakeRef<SceneHierarchyPanel>(m_scene);
