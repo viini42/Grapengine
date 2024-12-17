@@ -42,21 +42,24 @@ void EditorLayer::OnAttach()
 
 void EditorLayer::OnUpdate(TimeStep ts)
 {
-  if (m_fb->GetDimension() != m_viewport_dimension)
-  {
     m_fb->Resize(m_viewport_dimension);
     m_scene->OnViewportResize(m_viewport_dimension);
     m_editor_camera.UpdateAspectRatio(m_viewport_dimension);
-  }
-
-  m_editor_camera.OnUpdate(ts);
 
   m_fb->Bind();
 
   Renderer::SetClearColor(Color{ CLEAR_COLOR }.ToVec4());
   Renderer::Clear();
 
-  m_scene->OnUpdateEditor(ts, m_editor_camera);
+  if (m_in_editor_camera)
+  {
+    m_editor_camera.OnUpdate(ts);
+    m_scene->OnUpdateEditor(ts, m_editor_camera);
+  }
+  else
+  {
+    m_scene->OnUpdate(ts);
+  }
 
   m_fb->Unbind();
 }
@@ -179,6 +182,10 @@ void EditorLayer::OnImGuiUpdate(TimeStep ts)
   }
   ImGui::End();
 
+  ImGui::Begin("Scene settings");
+  ImGui::Checkbox("Editor camera", &m_in_editor_camera);
+  ImGui::End();
+
   ImGui::Begin("Viewport");
 
   //  m_viewport_focused = ImGui::IsWindowFocused();
@@ -202,7 +209,8 @@ void EditorLayer::OnImGuiUpdate(TimeStep ts)
 
 void EditorLayer::OnEvent(Event& e)
 {
-  m_editor_camera.OnEvent(e);
+  if (m_in_editor_camera)
+    m_editor_camera.OnEvent(e);
   m_scene->OnEvent(e);
 }
 

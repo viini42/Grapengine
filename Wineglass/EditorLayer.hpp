@@ -34,6 +34,7 @@ namespace GE
 
     Ptr<SceneHierarchyPanel> m_scene_panel;
     EditorCamera m_editor_camera;
+    bool m_in_editor_camera = false;
   };
 }
 
