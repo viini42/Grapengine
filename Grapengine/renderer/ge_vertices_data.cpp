@@ -49,7 +49,7 @@ const std::vector<VertexStruct>& VerticesData::GetData() const
 
 void VerticesData::SortVertices()
 {
-  std::ranges::sort(m_data);
+  std::ranges::stable_sort(m_data);
 }
 
 void VerticesData::Clear()
