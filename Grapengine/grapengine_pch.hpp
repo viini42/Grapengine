@@ -9,6 +9,7 @@
 #include <cmath>
 #include <cstddef>
 #include <ctime>
+#include <deque>
 #include <exception>
 #include <execution>
 #include <filesystem>
