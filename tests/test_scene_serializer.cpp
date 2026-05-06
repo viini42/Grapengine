@@ -13,25 +13,30 @@ TEST(SceneSerializer, Serialize)
   GE::Ptr<GE::Scene> scene = GE::Scene::Make("Untitled");
   [[maybe_unused]] const GE::Entity& empty_ent = scene->CreateEntity("My tag");
   const GE::Entity& full_ent = scene->CreateEntity("My model");
+  scene->AddComponent<GE::TransformComponent>(full_ent);
   [[maybe_unused]] const GE::TransformComponent& transf_comp =
-    scene->AddComponent<GE::TransformComponent>(full_ent);
+    scene->GetComponent<GE::TransformComponent>(full_ent);
   auto tex_slot = scene->RegisterTexture("path-to-texture");
+  scene->AddComponent<GE::PrimitiveComponent>(full_ent,
+                                              GE::Cube().GetDrawable(),
+                                              GE::Colors::ORANGE,
+                                              tex_slot);
   [[maybe_unused]] const GE::PrimitiveComponent& primitive_comp =
-    scene->AddComponent<GE::PrimitiveComponent>(full_ent,
-                                                GE::Cube().GetDrawable(),
-                                                GE::Colors::ORANGE,
-                                                tex_slot);
+    scene->GetComponent<GE::PrimitiveComponent>(full_ent);
+  scene->AddComponent<GE::CameraComponent>(full_ent, GE::Vec3{}, GE::Vec3{}, true, true);
   [[maybe_unused]] const GE::CameraComponent& camera_comp =
-    scene->AddComponent<GE::CameraComponent>(full_ent, GE::Vec3{}, GE::Vec3{}, true, true);
+    scene->GetComponent<GE::CameraComponent>(full_ent);
   scene->SetActiveCamera(full_ent);
+  scene->AddComponent<GE::AmbientLightComponent>(full_ent, GE::Colors::MAGENTA, 0.75f);
   [[maybe_unused]] const GE::AmbientLightComponent& ambient_comp =
-    scene->AddComponent<GE::AmbientLightComponent>(full_ent, GE::Colors::MAGENTA, 0.75f);
+    scene->GetComponent<GE::AmbientLightComponent>(full_ent);
+  scene->AddComponent<GE::LightSourceComponent>(full_ent,
+                                                GE::Colors::GREEN,
+                                                GE::Vec3{ 1, 2, 3 },
+                                                5.5f,
+                                                true);
   [[maybe_unused]] const GE::LightSourceComponent& light_comp =
-    scene->AddComponent<GE::LightSourceComponent>(full_ent,
-                                                  GE::Colors::GREEN,
-                                                  GE::Vec3{ 1, 2, 3 },
-                                                  5.5f,
-                                                  true);
+    scene->GetComponent<GE::LightSourceComponent>(full_ent);
   const std::set<GE::Entity>& entities = scene->GetEntitiesSet();
   GE::SceneSerializer serializer{ scene };
   serializer.SerializeToFile(file_path);

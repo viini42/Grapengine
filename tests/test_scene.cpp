@@ -26,7 +26,8 @@ TEST(Scene, AddComponents)
   [[maybe_unused]] GE::Entity third_ent = scene->CreateEntity("Third");
 
   ASSERT_DEATH(scene->AddComponent<GE::TagComponent>(first_ent, "Other"), "");
-  auto& transf = scene->AddComponent<GE::TransformComponent>(second_ent);
+  scene->AddComponent<GE::TransformComponent>(second_ent);
+  auto& transf = scene->GetComponent<GE::TransformComponent>(second_ent);
   transf.Position() = GE::Vec3{};
 
   ASSERT_EQ(scene->GetComponent<GE::TransformComponent>(second_ent).Position().x, GE::Vec3{}.x);
