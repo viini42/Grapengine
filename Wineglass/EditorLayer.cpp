@@ -42,10 +42,13 @@ void EditorLayer::OnAttach()
 
 void EditorLayer::OnUpdate(TimeStep ts)
 {
+
+  if (m_fb->GetDimension() != m_viewport_dimension)
+  {
     m_fb->Resize(m_viewport_dimension);
     m_scene->OnViewportResize(m_viewport_dimension);
     m_editor_camera.UpdateAspectRatio(m_viewport_dimension);
-
+  }
   m_fb->Bind();
 
   Renderer::SetClearColor(Color{ CLEAR_COLOR }.ToVec4());
