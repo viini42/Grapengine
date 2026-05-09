@@ -16,7 +16,7 @@ namespace GE
     void UpdateColor(const Color&);
     void UpdateTexture(u32 textureID);
     [[nodiscard]] const VerticesData& GetVerticesData() const;
-    [[nodiscard]] virtual const std::vector<u32>& GetIndicesData() const;
+    [[nodiscard]] const std::vector<u32>& GetIndicesData() const;
 
     bool operator==(const Drawable& other) const = default;
 
