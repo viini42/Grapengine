@@ -28,6 +28,10 @@ namespace GE
     [[nodiscard]] const Dimensions& GetDimension() const;
 
   private:
+    void CreateFramebuffer();
+    void CreateColorTexture();
+    void CreateDepthTexture();
+
     void Clear();
 
     Dimensions m_dimension;

@@ -11,6 +11,7 @@ namespace GE
     RendererID(u32 id) : m_id(id) {}
 
     explicit operator u32() const { return m_id; }
+    explicit operator i32() const { return i32(m_id); }
 
     [[nodiscard]] bool operator==(const RendererID& rhs) const { return m_id == rhs.m_id; }
     [[nodiscard]] bool operator!=(const RendererID& rhs) const { return !(rhs == *this); }
