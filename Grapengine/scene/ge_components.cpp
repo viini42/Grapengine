@@ -54,9 +54,13 @@ CameraComponent::CameraComponent(const Vec3& eye, const Vec3& target, bool act, 
 }
 
 //----------------------------------------------------------------------------------------------
-NativeScriptComponent::NativeScriptComponent() :
-    m_instance(nullptr), m_instantiate_fun({}), m_destroy_fun({})
+NativeScriptComponent::NativeScriptComponent() : m_instance(nullptr), m_instantiate_fun({}) {}
+
+//----------------------------------------------------------------------------------------------
+void NativeScriptComponent::Instantiate(Entity ent, Scene& scene)
 {
+  if (m_instantiate_fun)
+    m_instantiate_fun(this, ent, scene);
 }
 
 //----------------------------------------------------------------------------------------------
@@ -97,5 +101,15 @@ bool operator==(const GE::VarComponent& lhs, const GE::VarComponent& rhs)
   if (lhs.index() != rhs.index())
     return false;
 
-  return std::visit([](const auto& l, const auto& r) { return l == r; }, lhs, rhs);
+  return std::visit(
+    [](const auto& l, const auto& r) -> bool
+    {
+      using left_type = std::decay_t<decltype(l)>;
+      using right_type = std::decay_t<decltype(r)>;
+      if constexpr (std::same_as<left_type, right_type>)
+        return l == r;
+      return false;
+    },
+    lhs,
+    rhs);
 }

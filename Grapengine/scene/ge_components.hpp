@@ -119,28 +119,29 @@ namespace GE
   {
   public:
     explicit NativeScriptComponent();
+    NativeScriptComponent(const NativeScriptComponent&) = delete;
+    NativeScriptComponent& operator=(const NativeScriptComponent&) = delete;
+    NativeScriptComponent(NativeScriptComponent&&) = default;
+    NativeScriptComponent& operator=(NativeScriptComponent&&) = default;
 
     template <typename T, typename... Args>
     void Bind(Args... args)
     {
-      m_instantiate_fun = [&](Entity e, Scene& s) { m_instance = new T(e, std::ref(s), std::forward<Args>(args)...); };
-      m_destroy_fun = [this]()
+      m_instantiate_fun = [=](NativeScriptComponent* self, Entity e, Scene& s)
       {
-        delete static_cast<T*>(m_instance);
-        m_instance = nullptr;
+        self->m_instance = MakeRef<T>(e, std::ref(s), std::forward<Args>(args)...);
       };
     }
 
     [[nodiscard]] bool IsValid() const { return m_instance != nullptr; }
-    void Instantiate(Entity ent, Scene& scene) const { m_instantiate_fun(ent, scene); }
-    [[nodiscard]] ScriptableEntity* GetInstance() const { return m_instance; }
+    void Instantiate(Entity ent, Scene& scene);
+    [[nodiscard]] Ptr<ScriptableEntity> GetInstance() const { return m_instance; }
 
     bool operator==(const NativeScriptComponent&) const { return false; }
 
   private:
-    ScriptableEntity* m_instance;
-    std::function<void(Entity, Scene&)> m_instantiate_fun;
-    std::function<void()> m_destroy_fun;
+    Ptr<ScriptableEntity> m_instance;
+    std::function<void(NativeScriptComponent*, Entity, Scene&)> m_instantiate_fun;
   };
 
   //----------------------------------------------------------------------------------------------
