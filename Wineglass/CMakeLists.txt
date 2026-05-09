@@ -12,14 +12,12 @@ add_executable(Wine
 target_precompile_headers(Wine PRIVATE WineglassPCH.hpp)
 
 #add_executable(Wine main.cpp)
-target_include_directories(Wine PRIVATE SYSTEM
+target_include_directories(Wine SYSTEM PRIVATE
   ${CMAKE_SOURCE_DIR}/Grapengine
   ${CMAKE_SOURCE_DIR}/vendor/imgui
 )
 target_link_libraries(Wine PRIVATE Grapengine)
 target_link_libraries(Wine PRIVATE NativeScripts)
-
-target_link_libraries(Wine PRIVATE -ltbb)
 
 add_custom_command(
   TARGET Wine POST_BUILD
@@ -31,4 +29,3 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Wineglass/imgui.ini ${CMAKE_CURRENT_BINARY_DIR}/imgui.ini
   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/Wineglass/imgui.ini ${CMAKE_SOURCE_DIR}/imgui.ini
 )
-
