@@ -15,6 +15,7 @@ namespace GE
     static Ptr<Scene> Make(const std::string& name);
 
     Scene(const std::string& name);
+    ~Scene();
 
     Entity CreateEntity(std::string&& name);
 
@@ -26,6 +27,7 @@ namespace GE
      * Called when already exists a GL valid context
      */
     void OnAttach();
+    void OnDetach();
 
     void OnUpdate(TimeStep ts);
     void OnUpdateEditor(TimeStep ts, EditorCamera& editorCamera);
@@ -113,6 +115,7 @@ namespace GE
     void DestroyFromQueue();
 
     [[nodiscard]] Opt<Entity> RetrieveActiveCamera() const;
+    void OnDestroyNativeScript(Entity ent);
 
     std::string m_name;
     ECRegistry m_registry;

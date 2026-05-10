@@ -21,8 +21,14 @@ namespace
 }
 
 Scene::Scene(const std::string& name) :
-    m_name(name), m_registry({}), m_active_camera(std::nullopt), m_textures_registry()
+    m_name(name), m_registry(), m_active_camera(std::nullopt), m_textures_registry()
 {
+}
+
+Scene::~Scene()
+{
+  OnDetach();
+  GetQueue().clear();
 }
 
 void Scene::OnUpdate(TimeStep ts)
@@ -105,7 +111,7 @@ void Scene::UpdateNativeScripts(TimeStep& ts)
   // Move to Scene::OnScenePlay
   for (auto ent : g)
   {
-    const auto& nsc = m_registry.GetComponent<NativeScriptComponent>(ent);
+    auto& nsc = m_registry.GetComponent<NativeScriptComponent>(ent);
     if (!nsc.IsValid())
     {
       nsc.Instantiate(ent, *this);
@@ -251,10 +257,26 @@ Opt<Entity> Scene::RetrieveActiveCamera() const
   return active_camera;
 }
 
+void Scene::OnDestroyNativeScript(Entity ent)
+{
+  if (HasComponent<NativeScriptComponent>(ent))
+  {
+    auto& nsc = GetComponent<NativeScriptComponent>(ent);
+    if (nsc.IsValid())
+    {
+      nsc.GetInstance()->OnDestroy();
+      RemoveComponent<NativeScriptComponent>(ent);
+    }
+  }
+}
+
 void Scene::DestroyFromQueue()
 {
-  for (auto ent : GetQueue())
+  for (Entity ent : GetQueue())
+  {
+    OnDestroyNativeScript(ent);
     m_registry.Destroy(ent);
+  }
 }
 
 void Scene::OnEachEntity(const std::function<void(Entity)>& fun)
@@ -341,6 +363,11 @@ void Scene::OnAttach()
 {
   m_attached = true;
   m_textures_registry.LoadTextures();
+}
+
+void Scene::OnDetach()
+{
+  m_registry.OnEach([this](Entity ent) { OnDestroyNativeScript(ent); });
 }
 
 void Scene::UpdateLightSourcesPosition(TimeStep& /*ts*/,
