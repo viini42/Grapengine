@@ -58,7 +58,7 @@ std::string SceneSerializer::Serialize() const
 void SceneSerializer::SerializeToFile(const std::filesystem::path& path) const
 {
   GE_PROFILE;
-  GE_ASSERT(m_scene != nullptr, "Invalid scene");
+  GE_ASSERT(std::filesystem::exists(path.parent_path()), "Directory does not exist");
   GE_INFO("Serializing scene to '{}'", path.string())
 
   std::string scene_serialized = Serialize();

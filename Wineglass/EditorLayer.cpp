@@ -115,7 +115,7 @@ void EditorLayer::OnImGuiUpdate(TimeStep ts)
       {
         std::string filename =
           std::vformat("Scene_{}.yaml", std::make_format_args(m_scene->GetName()));
-        std::filesystem::path path = std::filesystem::current_path() / "Assets/Scene/" / filename;
+        std::filesystem::path path = std::filesystem::current_path() / "Assets/scenes/" / filename;
         SceneSerializer{ m_scene }.SerializeToFile(path);
       }
       if (ImGui::MenuItem("Load scene"))
