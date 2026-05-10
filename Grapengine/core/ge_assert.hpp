@@ -25,7 +25,7 @@ namespace GE
     std::string msg = std::format(str, std::forward<Args>(args)...);
     GE_ERROR("Assertion failed at {}:{} {}" , loc.file_name(), loc.line(), msg)
     GE_BREAKPOINT;
-    return true;
+    return false;
   }
 }
 
