@@ -42,9 +42,10 @@ add_subdirectory(Grapengine)
 add_subdirectory(Wineglass)
 
 # #############################################################################
-# Tests
-add_subdirectory(tests)
-
-# #############################################################################
 # Scripts
 add_subdirectory(Wineglass/nativescripts)
+
+# #############################################################################
+# Tests
+enable_testing()
+add_subdirectory(tests)
