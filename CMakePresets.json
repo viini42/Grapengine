@@ -55,7 +55,7 @@
     },
     {
       "name": "msvc-debug",
-      "displayName": "Debug build with MSVC compiler",
+      "description": "Debug build with MSVC compiler",
       "inherits": [
         "h_default",
         "h_debug",
@@ -67,7 +67,7 @@
     },
     {
       "name": "msvc-release",
-      "displayName": "Optimized build with MSVC compiler",
+      "description": "Optimized build with MSVC compiler",
       "inherits": [
         "h_default",
         "h_release",
@@ -79,7 +79,7 @@
     },
     {
       "name": "clang-win-debug",
-      "displayName": "Debug build with Clang compiler as MSVC frontend",
+      "description": "Debug build with Clang compiler as MSVC frontend",
       "inherits": [
         "h_default",
         "h_debug",
@@ -96,7 +96,7 @@
     },
     {
       "name": "clang-win-coverage",
-      "displayName": "Build to generate coverage results",
+      "description": "Build to generate coverage results",
       "inherits": [
         "clang-win-debug"
       ],
@@ -107,7 +107,7 @@
     },
     {
       "name": "clang-win-release",
-      "displayName": "Optimized build with Clang compiler as MSVC frontend",
+      "description": "Optimized build with Clang compiler as MSVC frontend",
       "inherits": [
         "h_default",
         "h_release",
@@ -124,7 +124,7 @@
     },
     {
       "name": "clang-linux-debug",
-      "displayName": "Debug build with Clang compiler as GCC frontend",
+      "description": "Debug build with Clang compiler as GCC frontend",
       "inherits": [
         "h_default",
         "h_debug",
@@ -136,7 +136,7 @@
     },
     {
       "name": "clang-linux-release",
-      "displayName": "Optimized build with Clang compiler as GCC frontend",
+      "description": "Optimized build with Clang compiler as GCC frontend",
       "inherits": [
         "h_default",
         "h_release",
@@ -147,8 +147,19 @@
       }
     },
     {
+      "name": "clang-linux-coverage",
+      "description": "Build to generate coverage results",
+      "inherits": [
+        "clang-linux-debug"
+      ],
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "-fcoverage-mapping -fprofile-instr-generate",
+        "COVERAGE_ENABLED": true
+      }
+    },
+    {
       "name": "gcc-debug",
-      "displayName": "Debug build with GCC compiler",
+      "description": "Debug build with GCC compiler",
       "inherits": [
         "h_default",
         "h_debug",
@@ -160,7 +171,7 @@
     },
     {
       "name": "gcc-release",
-      "displayName": "Optmized build with GCC compiler",
+      "description": "Optmized build with GCC compiler",
       "inherits": [
         "h_default",
         "h_release",
