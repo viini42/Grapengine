@@ -122,6 +122,7 @@ namespace GE
     Opt<Entity> m_active_camera;
     TexturesRegistry m_textures_registry;
     bool m_attached = false;
+    std::deque<Entity> m_destroy_queue;
   };
 
 } // GE

@@ -11,15 +11,6 @@
 
 using namespace GE;
 
-namespace
-{
-  std::deque<Entity>& GetQueue()
-  {
-    static std::deque<Entity> m_destroy_queue{};
-    return m_destroy_queue;
-  };
-}
-
 Scene::Scene(const std::string& name) :
     m_name(name), m_registry(), m_active_camera(std::nullopt), m_textures_registry()
 {
@@ -28,7 +19,6 @@ Scene::Scene(const std::string& name) :
 Scene::~Scene()
 {
   OnDetach();
-  GetQueue().clear();
 }
 
 void Scene::OnUpdate(TimeStep ts)
@@ -272,11 +262,12 @@ void Scene::OnDestroyNativeScript(Entity ent)
 
 void Scene::DestroyFromQueue()
 {
-  for (Entity ent : GetQueue())
+  for (Entity ent : m_destroy_queue)
   {
     OnDestroyNativeScript(ent);
     m_registry.Destroy(ent);
   }
+  m_destroy_queue.clear();
 }
 
 void Scene::OnEachEntity(const std::function<void(Entity)>& fun)
@@ -356,7 +347,7 @@ void Scene::EnqueueToDestroy(Opt<Entity> ent)
   if (!ent)
     return;
 
-  GetQueue().push_back(ent.value());
+  m_destroy_queue.push_back(ent.value());
 }
 
 void Scene::OnAttach()
