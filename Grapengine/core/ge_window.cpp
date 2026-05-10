@@ -32,6 +32,7 @@ Window::Window(const WindowProps& props, const EventCallbackFn& cb) :
                               props.title.c_str(),
                               nullptr,
                               nullptr);
+  GE_ASSERT_OR_RETURN_VOID(m_window != nullptr, "Failed to create GLFW window");
   //  glfwSetWindowAspectRatio(m_window,
   //                           static_cast<i32>(props.width),
   //                           static_cast<i32>(props.height));
