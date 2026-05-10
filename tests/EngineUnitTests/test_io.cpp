@@ -3,7 +3,8 @@
 #include <utils/ge_io.hpp>
 
 #if defined(GE_CLANG_COMPILER)
-  #pragma clang diagnostic ignored "-Wglobal-constructors"
+  #pragma clang diagnostic ignored "-Wunsafe-buffer-usage-in-libc-call" // fprintf in gtest-death
+  #pragma clang diagnostic ignored "-Wglobal-constructors" // gtest macro expand
 #endif
 
 constexpr auto RANDOM_NUMBERS_COUNT = 128;
