@@ -135,3 +135,8 @@ Ptr<ImGuiLayer> GE::Application::GetImGuiLayer() const
 {
   return m_imgui_layer;
 }
+
+f64 Application::GetFPS() const
+{
+  return m_current_fps;
+}

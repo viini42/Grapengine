@@ -27,7 +27,7 @@ namespace GE
 
     [[nodiscard]] Ptr<ImGuiLayer> GetImGuiLayer() const;
 
-    f64 GetFPS() const { return m_current_fps; }
+    [[nodiscard]] f64 GetFPS() const;
 
     Ptr<Window> GetWindow();
 

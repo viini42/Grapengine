@@ -3,7 +3,8 @@
 #include <gtest/gtest.h>
 
 #if defined(GE_CLANG_COMPILER)
-  #pragma clang diagnostic ignored "-Wglobal-constructors"
+  #pragma clang diagnostic ignored "-Wunsafe-buffer-usage-in-libc-call" // fprintf in gtest-death
+  #pragma clang diagnostic ignored "-Wglobal-constructors"              // gtest macro expand
 #endif
 
 TEST(Scene, CreateEntities)

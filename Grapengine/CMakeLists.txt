@@ -36,11 +36,11 @@ file(GLOB_RECURSE GRAPES_HEADERS
 
 add_library(Grapengine STATIC ${GRAPES_HEADERS} ${GRAPES_SOURCES})
 
-if (DEFINED USE_TRACY_PROFILER)
+if(DEFINED USE_TRACY_PROFILER)
   message(STATUS "GRAPENGINE: Enabling tracy profiler")
   target_compile_definitions(Grapengine PUBLIC USE_TRACY_PROFILER TRACY_ENABLE TRACY_NO_SYSTEM_TRACING)
   target_include_directories(Grapengine SYSTEM PUBLIC ${CMAKE_SOURCE_DIR}/vendor/tracy)
-endif ()
+endif()
 
 target_precompile_headers(Grapengine PRIVATE ${CMAKE_SOURCE_DIR}/Grapengine/grapengine_pch.hpp)
 target_include_directories(Grapengine
@@ -56,7 +56,7 @@ target_link_libraries(Grapengine PUBLIC GrapengineCompileOptions)
 
 ##############################################################################
 #
-if (CMAKE_CXX_COMPILER_ID STREQUAL Clang)
+if(CMAKE_CXX_COMPILER_ID STREQUAL Clang)
   add_custom_target(
     GrapeTidy
     DEPENDS Grapengine
@@ -68,7 +68,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL Clang)
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/Grapengine/RunClangd.cmake "${CMAKE_BINARY_DIR}" "${GRAPES_SOURCES}"
     DEPENDS Grapengine
   )
-endif ()
+endif()
 
 # ############################################################################
 # imgui
@@ -82,6 +82,9 @@ add_library(ImGui STATIC
   ${CMAKE_SOURCE_DIR}/vendor/imgui/misc/cpp/imgui_stdlib.h
   ${CMAKE_SOURCE_DIR}/vendor/imgui/misc/cpp/imgui_stdlib.cpp
 )
+if(CMAKE_CXX_COMPILER_ID STREQUAL Clang)
+  target_compile_options(ImGui PRIVATE -w)
+endif()
 set_target_properties(
   ImGui
   PROPERTIES
