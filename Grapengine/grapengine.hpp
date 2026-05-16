@@ -35,7 +35,6 @@
 #include "renderer/ge_framebuffer.hpp"
 #include "renderer/ge_renderer.hpp"
 #include "renderer/shader_programs/ge_material_shader.hpp"
-#include "renderer/shader_programs/ge_pos_tex_shader.hpp"
 
 // Scene
 #include "scene/ge_components.hpp"
