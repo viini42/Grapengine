@@ -40,12 +40,6 @@ void MaterialShader::UpdateViewProjectionMatrix(const Mat4& viewProj, const Vec3
   m_shader->UploadVec3("u_viewPos", viewPosition);
 }
 
-void MaterialShader::UpdateTexture(int id)
-{
-  Activate();
-  m_shader->UploadInt("u_texture", id);
-}
-
 void MaterialShader::UpdateTextures(const std::vector<i32>& textures)
 {
   Activate();
@@ -99,8 +93,8 @@ void MaterialShader::UpdateLightSources(const std::vector<LightSource>& lightSou
   colors.reserve(lightSources.size());
   std::vector<f32> strenghts;
   strenghts.reserve(lightSources.size());
-  std::vector<f32> specular_strenghts;
-  specular_strenghts.reserve(lightSources.size());
+  std::vector<f32> specular_strengths;
+  specular_strengths.reserve(lightSources.size());
   std::vector<f32> specular_shininess;
   specular_shininess.reserve(lightSources.size());
   for (const auto& [pos, color, str, spec, shine] : lightSources)
@@ -108,14 +102,14 @@ void MaterialShader::UpdateLightSources(const std::vector<LightSource>& lightSou
     positions.push_back(pos);
     colors.push_back(color.ToVec3());
     strenghts.push_back(str);
-    specular_strenghts.push_back(spec);
+    specular_strengths.push_back(spec);
     specular_shininess.push_back(f32(shine));
   }
 
   UpdateLightPosition(positions);
   UpdateLightColor(colors);
   UpdateLightStrength(strenghts);
-  m_shader->UploadFloatArray("u_specularStrenght", specular_strenghts);
+  m_shader->UploadFloatArray("u_specularStrength", specular_strengths);
   m_shader->UploadFloatArray("u_specularShininess", specular_shininess);
   m_shader->UploadInt("u_lights_count", i32(lightSources.size()));
 }

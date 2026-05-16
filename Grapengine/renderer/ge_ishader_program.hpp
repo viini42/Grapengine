@@ -34,7 +34,6 @@ namespace GE
     virtual void Deactivate() = 0;
 
     virtual void UpdateViewProjectionMatrix(const Mat4& viewProj, const Vec3& viewPosition) = 0;
-    virtual void UpdateTexture(int id) = 0;
   };
 }
 
