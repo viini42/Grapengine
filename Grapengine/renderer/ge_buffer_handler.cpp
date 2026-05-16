@@ -11,9 +11,8 @@ void BufferHandler::UpdatePosition(VerticesData& vd, const Mat4& modelMatrix)
   std::ranges::for_each(vertices,
                         [&](VertexStruct& vs) { vs.position = modelMatrix * vs.position; });
 
+  Mat3 modelInvTranspose = modelMatrix.Inverse().Transpose().ToMat3();
   std::ranges::for_each(vertices,
-                        [&](VertexStruct& vs) {
-                          vs.normal =
-                            (modelMatrix.Inverse().Transpose().ToMat3() * vs.normal).Normalize();
-                        });
+                        [&](VertexStruct& vs)
+                        { vs.normal = (modelInvTranspose * vs.normal).Normalize(); });
 }
